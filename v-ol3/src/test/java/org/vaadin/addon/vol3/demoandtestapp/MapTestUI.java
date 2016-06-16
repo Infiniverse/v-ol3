@@ -9,6 +9,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.vaadin.gwtol3.client.source.BingSourceOptions;
 
 /**
  * The map demo UI. Contains a number of test maps as navigator views.
@@ -40,8 +41,10 @@ public class MapTestUI extends UI {
 
     private void addViews() {
         addView("Basic",BasicMap.class);
+        addView("Bing", BingMap.class);
         addView("ViewPort",ViewPortMap.class);
-        addView("Constrained", ConstrainedMap.class);
+        addView("Constrained (center)", ConstrainedMap.class);
+//        addView("Constrained (panning)", PanningConstrainedMap.class);
         addView("Multilayer", MultiLayerMap.class);
         addView("OpenStreetMap", OSMMap.class);
         addView("ImageWMSMap",ImageWMSMap.class);
@@ -57,6 +60,7 @@ public class MapTestUI extends UI {
         addView("ClickHandler", ClickHandlerTestMap.class);
         addView("Proj4jsMap", Proj4jsMap.class);
         addView("Resolutions", ResolutionsTestMap.class);
+        addView("GeoJSON", GeoJsonMap.class);
     }
 
     private void addView(String label, Class<? extends View> implementation){
