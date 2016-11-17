@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.addon</groupId>
 	<artifactId>v-ol3</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<name>OpenLayers 3 Wrapper for Vaadin</name>
 
 	<properties>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>org.vaadin</groupId>
             <artifactId>gwt-ol3</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <!-- for serializing features as geojson -->
         <dependency>
@@ -158,6 +158,7 @@
                         <!-- Remove resources included due to gwt compilation -->
                         <exclude>**/demoandtestapp/*</exclude>
                         <exclude>VAADIN/img/*</exclude>
+                        <exclude>VAADIN.samples/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -199,10 +200,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/testwebapp/VAADIN/img/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/testwebapp/VAADIN/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/src/test/resources/VAADIN/img/</directory>
+                                    <directory>${project.basedir}/src/test/resources/VAADIN/</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
