@@ -12,7 +12,7 @@ public class BingSourceOptions extends JavaScriptObject {
     }
 
     public static native final BingSourceOptions create()/*-{
-        return {};
+        return { maxZoom : 19 };
     }-*/;
 
      /** Sets the API-Token to get access to Bing-maps
