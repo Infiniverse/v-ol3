@@ -15,6 +15,7 @@ import org.vaadin.addon.vol3.client.control.*;
 import org.vaadin.addon.vol3.client.interaction.OLInteractionConnector;
 import org.vaadin.addon.vol3.client.layer.OLLayerConnector;
 import org.vaadin.addon.vol3.client.map.OLOnClickListenerRpc;
+import org.vaadin.addon.vol3.client.popup.VaadinOverlayConnector;
 import org.vaadin.addon.vol3.client.source.HasFeatureInfoUrl;
 import org.vaadin.addon.vol3.client.util.DataConversionUtils;
 import org.vaadin.gwtol3.client.*;
@@ -23,6 +24,7 @@ import org.vaadin.gwtol3.client.feature.Feature;
 import org.vaadin.gwtol3.client.layer.Layer;
 import org.vaadin.gwtol3.client.map.ClickEvent;
 import org.vaadin.gwtol3.client.map.OnClickListener;
+import org.vaadin.gwtol3.client.proj.Projection;
 import org.vaadin.gwtol3.client.resources.ResourceInjector;
 
 import java.util.ArrayList;
@@ -99,6 +101,11 @@ public class OLMapConnector extends AbstractHasComponentsConnector implements El
                     OLInteractionConnector interaction= (OLInteractionConnector) oldConnector;
                     getWidget().getMap().removeInteraction(interaction.getInteraction());
                 }
+                if (oldConnector instanceof VaadinOverlayConnector) {
+                    if (oldConnector.getWidget().getElement().getParentElement().equals(getWidget().getElement()))
+                        getWidget().getElement().removeChild(oldConnector.getWidget().getElement());
+                    ((VaadinOverlayConnector) oldConnector).detach();
+                }
             }
         }
         // add new layers, interactions and view
@@ -117,6 +124,9 @@ public class OLMapConnector extends AbstractHasComponentsConnector implements El
                     // on initialization
                     deferredAddInteraction(interaction);
                 }
+            }
+            if(connector instanceof VaadinOverlayConnector) {
+                ((VaadinOverlayConnector)connector).attach(!oldChildren.contains(connector));
             }
         }
         // ensure layer ordering
@@ -199,6 +209,11 @@ public class OLMapConnector extends AbstractHasComponentsConnector implements El
         if(getState().coordinateSystemDefinitions!=null){
             for(Map.Entry<String,String> entry : getState().coordinateSystemDefinitions.entrySet()){
                 Proj4js.define(entry.getKey(), entry.getValue());
+            }
+        }
+        if (getState().customProjection != null) {
+            for (OLProjection projection : getState().customProjection) {
+                Projection.createCustom(projection.code, projection.units, Extent.create(DataConversionUtils.toJsArrayNumber(projection.extent)));
             }
         }
     }

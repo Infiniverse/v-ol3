@@ -7,15 +7,19 @@ import org.vaadin.addon.vol3.client.OLCoordinate;
 import org.vaadin.addon.vol3.client.OLMapState;
 import org.vaadin.addon.vol3.client.OLOverlay;
 import org.vaadin.addon.vol3.client.OLPixel;
+import org.vaadin.addon.vol3.client.OLProjection;
 import org.vaadin.addon.vol3.client.control.*;
 import org.vaadin.addon.vol3.client.map.OLOnClickListenerRpc;
 import org.vaadin.addon.vol3.interaction.OLInteraction;
 import org.vaadin.addon.vol3.layer.OLLayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * The core of the wrapper. Interact with this one to add OpenLayers 3 maps to your Vaadin application
@@ -168,6 +172,28 @@ public class OLMap extends AbstractComponentContainer {
         } else{
             throw new UnsupportedOperationException("Only instances of OLLayer and OLInteraction can be added");
         }
+    }
+
+    Map<OLOverlay,VaadinOverlay> vaadinOverlays;
+    public void addVaadinOverlay(VaadinOverlay overlay) {
+        if(vaadinOverlays == null) {
+            vaadinOverlays= new HashMap<OLOverlay,VaadinOverlay>();
+        }
+
+        // Don't add the same overlay again.
+        if(!components.contains(overlay)) {
+            super.addComponent(overlay);
+            components.add(overlay);
+        }
+        if(getState().overlays == null || !getState().overlays.contains(overlay.getOverlay())) {
+            addOverlay(overlay.getOverlay());
+            this.markAsDirty();
+        }
+        vaadinOverlays.put(overlay.getOverlay(), overlay);
+    }
+
+    public void removeVaadinOverlay(VaadinOverlay overlay) {
+        removeOverlay(overlay.getOverlay());
     }
 
     @Override
@@ -358,6 +384,12 @@ public class OLMap extends AbstractComponentContainer {
                 getState().overlays=null;
             }
         }
+        if(vaadinOverlays.containsKey(overlay)) {
+            super.removeComponent(vaadinOverlays.get(overlay));
+            components.remove(vaadinOverlays.get(overlay));
+            this.markAsDirty();
+            vaadinOverlays.remove(overlay);
+        }
     }
 
     /** Removes all overlays from the map
@@ -365,6 +397,12 @@ public class OLMap extends AbstractComponentContainer {
      */
     public void removeOverlays(){
         getState().overlays=null;
+        for(VaadinOverlay voverlay: vaadinOverlays.values()) {
+            super.removeComponent(voverlay);
+            components.remove(voverlay);
+            this.markAsDirty();
+        }
+        vaadinOverlays.clear();
     }
 
 
@@ -381,6 +419,14 @@ public class OLMap extends AbstractComponentContainer {
         getState().loadTilesWhileAnimating=options.getLoadTilesWhileAnimating();
         getState().coordinateSystemDefinitions=options.getProjectionDefinitions();
         getState().inputProjection=options.getInputProjection();
+        getState().customProjection=options.getCustomProjections();
+    }
+
+    public void addCustomProjection(OLProjection projection) {
+        if(getState().customProjection == null) {
+            getState().customProjection = new LinkedList<OLProjection>();
+        }
+        getState().customProjection.add(projection);
     }
 
     private void addDefaultControls() {
