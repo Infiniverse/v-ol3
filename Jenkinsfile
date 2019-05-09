@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Package') {
             steps {
-                sh "mvn install -DskipTests -B"
+                sh "mvn package -DskipTests -B"
             }
         }
     }
@@ -30,7 +30,6 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'repository/org/vaadin/addon/v-ol3/**', fingerprint: true
-            junit testResults: '**/surefire-reports/*.xml'
         }
     }
 }
