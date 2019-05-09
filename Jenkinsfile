@@ -29,10 +29,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts:
-                'repository/org/vaadin/addon/v-ol3/**,' +
-                'repository/org/vaadin/addon/ol3-wrapper/**' +
-                'repository/org/vaadin/gwt-ol3/**', fingerprint: true
+            archiveArtifacts artifacts: 'repository/**/v-ol3/**,repository/**/ol3-wrapper/**,repository/**/gwt-ol3/**', fingerprint: true
         }
     }
 }
