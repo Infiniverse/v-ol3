@@ -20,12 +20,13 @@ public class OLHereMapsSource extends OLXYZSource {
     }
 
     private void setOptions(OLHereMapsSourceOptions options) {
-
-        String host = "{1-4}." + options.getBase() + ".maps.ls.hereapi.com";
-        String path = "/maptile/2.1/" + options.getType() + "/newest/" + options.getScheme() + "/{z}/{x}/{y}/256/png";
-        String params = "?apiKey=" + options.getApiKey();
-
-        getState().urlTemplate = "https://" + host + path + params;
+        getState().urlTemplate =
+                String.format(
+                        "https://{1-4}.%s.maps.ls.hereapi.com/maptile/2.1/%s/newest/%s/{z}/{x}/{y}/256/png?apiKey=%s",
+                        options.getBase(),
+                        options.getType(),
+                        options.getScheme(),
+                        options.getApiKey());
     }
 
     @Override
