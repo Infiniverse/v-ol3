@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.addon</groupId>
 	<artifactId>v-ol3</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.3-ts</version>
+	<version>1.3-ts-2</version>
 	<name>OpenLayers 3 Wrapper for Vaadin</name>
 
 	<properties>
