@@ -39,6 +39,7 @@ public class MapTestUI extends UI {
     }
 
     private void addViews() {
+        addView("HereMaps", HereMap.class);
         addView("Basic",BasicMap.class);
         addView("Bing", BingMap.class);
         addView("ViewPort",ViewPortMap.class);
